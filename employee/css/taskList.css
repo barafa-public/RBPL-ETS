@@ -1,0 +1,86 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #f0f4f0;
+  min-height: 100vh;
+}
+
+.header {
+  background: #3ab87a;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-back {
+  width: 36px; height: 36px;
+  border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.25);
+  color: white; font-size: 15px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+.header-title { font-size: 19px; font-weight: 800; color: white; }
+
+.circle { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.1); }
+.circle-1 { width: 100px; height: 100px; top: -30px; right: -20px; }
+.circle-2 { width: 60px; height: 60px; bottom: -20px; right: 60px; }
+
+.content { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+
+/* Order Card */
+.order-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.order-id { font-size: 12px; color: #aaa; font-weight: 600; }
+
+.badge-wrap { display: flex; gap: 6px; }
+
+.badge {
+  font-size: 11.5px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+}
+.badge-yellow { background: #fff8e1; color: #f5a623; }
+.badge-green  { background: #e8f5e9; color: #3ab87a; border: 1px solid #c8e6c9; }
+
+.customer-name { font-size: 17px; font-weight: 800; color: #1a1a1a; margin-bottom: 10px; }
+
+.meta-label { font-size: 13px; color: #888; font-weight: 600; }
+.meta-value { font-size: 14px; color: #1a1a1a; font-weight: 700; margin-bottom: 8px; }
+
+.address-wrap { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 14px; }
+.addr-icon { color: #3ab87a; font-size: 15px; margin-top: 2px; flex-shrink: 0; }
+
+.btn-terima {
+  display: block; width: 100%; padding: 13px;
+  background: #3ab87a; color: white; border: none;
+  border-radius: 12px; font-size: 15px; font-weight: 700;
+  font-family: 'Nunito', sans-serif; cursor: pointer;
+  text-align: center; text-decoration: none;
+  box-shadow: 0 3px 12px rgba(58,184,122,0.3);
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-terima:hover  { background: #2ea569; }
+.btn-terima:active { transform: scale(0.98); }
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 12px; padding: 60px 20px; color: #bbb;
+}
+.empty-state i { font-size: 48px; }
+.empty-state p { font-size: 15px; font-weight: 600; }
