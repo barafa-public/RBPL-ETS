@@ -1,0 +1,127 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #f0f4f0;
+  min-height: 100vh;
+  padding-bottom: 90px;
+}
+
+.header {
+  background: #3ab87a;
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 12px;
+  position: relative; overflow: hidden;
+}
+.btn-back {
+  width: 36px; height: 36px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.25); color: white; font-size: 15px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.header-title { font-size: 19px; font-weight: 800; color: white; }
+.circle { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.1); }
+.circle-1 { width: 100px; height: 100px; top: -30px; right: -20px; }
+.circle-2 { width: 60px; height: 60px; bottom: -20px; right: 60px; }
+
+.content { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+/* Status Bar */
+.status-bar {
+  border-radius: 12px; padding: 12px 16px;
+  font-size: 14px; font-weight: 700; text-align: center;
+}
+.status-yellow { background: #fff8e1; color: #b7860b; }
+.status-green  { background: #e8f5e9; color: #3ab87a; }
+
+/* Section Card */
+.section-card {
+  background: white; border-radius: 16px;
+  padding: 18px 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.section-title { font-size: 15px; font-weight: 800; color: #1a1a1a; margin-bottom: 16px; }
+
+/* Progress Steps */
+.progress-list { display: flex; flex-direction: column; }
+
+.progress-item { display: flex; gap: 14px; }
+
+.step-left {
+  display: flex; flex-direction: column; align-items: center;
+  width: 36px; flex-shrink: 0;
+}
+
+.step-dot {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; flex-shrink: 0;
+}
+.dot-done    { background: #3ab87a; color: white; }
+.dot-active  { background: #f5c842; color: white; }
+.dot-pending { background: #e8e8e8; color: #aaa; }
+
+.step-line { width: 2px; flex: 1; min-height: 24px; margin: 4px 0; }
+.line-done    { background: #3ab87a; }
+.line-pending { background: #e8e8e8; }
+
+.step-info { padding-bottom: 20px; flex: 1; }
+.step-label { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; }
+.step-sub   { font-size: 12.5px; color: #888; font-weight: 600; line-height: 1.4; }
+.text-pending .step-label { color: #bbb; }
+.text-pending .step-sub   { color: #ccc; }
+
+/* Info rows */
+.info-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+.info-row:last-child { margin-bottom: 0; }
+.info-icon { color: #3ab87a; font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+.info-label { font-size: 12px; color: #aaa; font-weight: 600; margin-bottom: 2px; }
+.info-value { font-size: 14px; font-weight: 700; color: #1a1a1a; line-height: 1.4; }
+
+/* Kontak */
+.contact-row { display: flex; justify-content: space-between; align-items: center; }
+.contact-label { font-size: 14px; color: #555; font-weight: 600; }
+.contact-phone { font-size: 14px; font-weight: 700; color: #3ab87a; text-decoration: none; }
+
+/* Catatan */
+.note-card {
+  background: #faf5e4; border-radius: 12px; padding: 14px 16px;
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 13.5px; color: #555; font-weight: 600; line-height: 1.5;
+}
+.note-icon { font-size: 16px; flex-shrink: 0; }
+
+/* Action Bar */
+.action-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  padding: 14px 16px;
+  background: #f0f4f0;
+}
+.btn-action {
+  width: 100%; padding: 15px;
+  background: #3ab87a; color: white; border: none;
+  border-radius: 14px; font-size: 16px; font-weight: 800;
+  font-family: 'Nunito', sans-serif; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(58,184,122,0.35);
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-action:hover  { background: #2ea569; }
+.btn-action:active { transform: scale(0.98); }
+
+/* Success */
+.success-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; min-height: calc(100vh - 60px);
+  gap: 14px; padding: 24px;
+}
+.success-icon {
+  width: 90px; height: 90px; border-radius: 50%;
+  border: 3.5px solid #3ab87a;
+  display: flex; align-items: center; justify-content: center;
+  color: #3ab87a; font-size: 36px;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.success-title { font-size: 18px; font-weight: 800; color: #1a1a1a; text-align: center; }
+.success-sub   { font-size: 14px; color: #888; font-weight: 600; text-align: center; }
