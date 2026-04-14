@@ -1,0 +1,227 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #f0f4f0;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+  background: #3ab87a;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.25);
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.header-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: white;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+}
+.circle-1 { width: 100px; height: 100px; top: -30px; right: -20px; }
+.circle-2 { width: 60px;  height: 60px;  bottom: -20px; right: 60px; }
+
+/* ── Content ── */
+.content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Info Card ── */
+.info-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.info-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.info-sub {
+  font-size: 13.5px;
+  color: #888;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ── Order Card ── */
+.order-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.order-id {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.customer-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.order-meta {
+  font-size: 13.5px;
+  color: #555;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* ── Assign Form ── */
+.assign-form {
+  margin-top: 14px;
+}
+
+.select-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.select-wrap {
+  position: relative;
+}
+
+.select-wrap select {
+  width: 100%;
+  padding: 13px 40px 13px 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: 'Nunito', sans-serif;
+  color: #555;
+  background: #f0f0f0;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.select-wrap select:focus { background: #e8f5e9; }
+
+.select-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+/* ── Tombol Tugaskan ── */
+.btn-assign {
+  width: 100%;
+  padding: 13px;
+  background: #3ab87a;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  margin-top: 12px;
+  box-shadow: 0 3px 12px rgba(58,184,122,0.3);
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-assign:hover  { background: #2ea569; }
+.btn-assign:active { transform: scale(0.98); }
+
+/* ── Empty State ── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 60px 20px;
+  color: #bbb;
+}
+
+.empty-state i { font-size: 48px; }
+.empty-state p { font-size: 15px; font-weight: 600; }
+
+/* ══════════════════════════════════════
+   SUCCESS PAGE
+══════════════════════════════════════ */
+.success-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 60px);
+  gap: 14px;
+  padding: 24px;
+}
+
+.success-icon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3.5px solid #3ab87a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3ab87a;
+  font-size: 36px;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  margin-bottom: 4px;
+}
+
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.success-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.success-status {
+  font-size: 14px;
+  color: #1c1212;
+  font-weight: 600;
+}
