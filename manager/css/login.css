@@ -1,0 +1,176 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+font-family: 'Nunito', sans-serif;
+min-height: 100vh;
+display: flex;
+align-items: flex-end;
+justify-content: center;
+position: relative;
+overflow: hidden;
+}
+
+/* Background hijau blur */
+.bg-overlay {
+position: fixed;
+inset: 0;
+background: linear-gradient(160deg, #3ab87a 0%, #76d8a0 50%, #b2f0cb 100%);
+opacity: 0.85;
+z-index: 0;
+}
+
+/* Wrapper card dari bawah */
+.wrapper {
+position: relative;
+z-index: 1;
+width: 100%;
+padding: 0;
+}
+
+/* Card putih */
+.card {
+background: #ffffff;
+border-radius: 28px 28px 0 0;
+padding: 36px 28px 48px;
+box-shadow: 0 -8px 30px rgba(0,0,0,0.12);
+animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+from { opacity: 0; transform: translateY(40px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo */
+.logo-wrap {
+display: flex;
+justify-content: center;
+margin-bottom: 18px;
+}
+
+.logo {
+width: 62px;
+height: 62px;
+background: #3ab87a;
+border-radius: 18px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: white;
+font-size: 28px;
+box-shadow: 0 4px 16px rgba(58,184,122,0.4);
+}
+
+/* Judul */
+.title {
+text-align: center;
+font-size: 22px;
+font-weight: 800;
+color: #1a1a1a;
+margin-bottom: 4px;
+}
+
+.subtitle {
+text-align: center;
+font-size: 13.5px;
+color: #888;
+margin-bottom: 24px;
+}
+
+/* Form */
+.form-group {
+margin-bottom: 16px;
+}
+
+.form-group label {
+display: block;
+font-size: 13.5px;
+font-weight: 700;
+color: #333;
+margin-bottom: 6px;
+}
+
+.input-wrap {
+position: relative;
+display: flex;
+align-items: center;
+}
+
+.input-wrap input {
+width: 100%;
+padding: 13px 42px;
+border: 1.5px solid #e8e8e8;
+border-radius: 12px;
+font-size: 14px;
+font-family: 'Nunito', sans-serif;
+color: #333;
+background: #fafafa;
+outline: none;
+transition: border-color 0.2s;
+}
+
+.input-wrap input:focus {
+border-color: #3ab87a;
+background: #fff;
+}
+
+.input-wrap input::placeholder { color: #bbb; }
+
+.icon-left {
+position: absolute;
+left: 13px;
+color: #bbb;
+font-size: 15px;
+pointer-events: none;
+}
+
+.icon-right {
+position: absolute;
+right: 13px;
+color: #bbb;
+font-size: 15px;
+cursor: pointer;
+transition: color 0.2s;
+}
+
+.icon-right:hover { color: #3ab87a; }
+
+/* Tombol */
+.btn-masuk {
+width: 100%;
+padding: 15px;
+background: #3ab87a;
+color: white;
+border: none;
+border-radius: 14px;
+font-size: 16px;
+font-weight: 700;
+font-family: 'Nunito', sans-serif;
+cursor: pointer;
+margin-top: 8px;
+box-shadow: 0 4px 16px rgba(58,184,122,0.35);
+transition: background 0.2s, transform 0.1s;
+}
+
+.btn-masuk:hover { background: #2ea569; }
+.btn-masuk:active { transform: scale(0.98); }
+
+/* Footer note */
+.footer-note {
+text-align: center;
+font-size: 13px;
+color: #aaa;
+font-weight: 600;
+margin-top: 18px;
+}
+
+/* Alert error */
+.alert-error {
+background: #fdecea;
+color: #c0392b;
+padding: 12px 14px;
+border-radius: 10px;
+font-size: 13.5px;
+font-weight: 600;
+margin-bottom: 16px;
+}
