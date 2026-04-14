@@ -1,0 +1,214 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(160deg, #3ab87a 0%, #76d8a0 40%, #b2f0cb 100%);
+}
+
+/* Card memenuhi seluruh layar */
+.card {
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 60px 24px 32px;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo */
+.logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  background: #3ab87a;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28px;
+  box-shadow: 0 4px 16px rgba(58, 184, 122, 0.4);
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 28px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrap input {
+  width: 100%;
+  padding: 13px 42px 13px 42px;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'Nunito', sans-serif;
+  color: #333;
+  background: #fafafa;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.input-wrap input::placeholder {
+  color: #bbb;
+}
+
+.input-wrap input:focus {
+  border-color: #3ab87a;
+  background: #fff;
+}
+
+.icon-left {
+  position: absolute;
+  left: 13px;
+  color: #bbb;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.icon-right {
+  position: absolute;
+  right: 13px;
+  color: #bbb;
+  font-size: 15px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.icon-right:hover {
+  color: #3ab87a;
+}
+
+.forgot {
+  text-align: right;
+  margin-top: 6px;
+}
+
+.forgot a {
+  font-size: 13px;
+  color: #3ab87a;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-masuk {
+  width: 100%;
+  padding: 15px;
+  background: #3ab87a;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 4px 16px rgba(58, 184, 122, 0.35);
+}
+
+.btn-masuk a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.btn-masuk:hover { background: #2ea569; }
+.btn-masuk:active { transform: scale(0.98); }
+
+.register-text {
+  text-align: center;
+  font-size: 14px;
+  color: #888;
+  margin-top: 16px;
+}
+
+.register-text a {
+  color: #3ab87a;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 16px;
+  color: #bbb;
+  font-size: 13px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e8e8e8;
+}
+
+.social-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.social-btn:hover {
+  border-color: #3ab87a;
+  background: #f6fdf9;
+}
