@@ -1,0 +1,220 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #f0f4f0;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+  background: #3ab87a;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.25);
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.header-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: white;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+}
+.circle-1 { width: 100px; height: 100px; top: -30px; right: -20px; }
+.circle-2 { width: 60px;  height: 60px;  bottom: -20px; right: 60px; }
+
+/* ── Tab Filter ── */
+.tab-wrap {
+  display: flex;
+  gap: 8px;
+  padding: 16px 16px 0;
+  background: #f0f4f0;
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+  background: white;
+  color: #555;
+  border: 1.5px solid #e8e8e8;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tab.active {
+  background: #3ab87a;
+  color: white;
+  border-color: #3ab87a;
+}
+
+/* ── Content ── */
+.content {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Order Block (card + tombol di luar) ── */
+.order-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Order Card ── */
+.order-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.order-id {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.customer-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+/* ── Badge ── */
+.badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.badge-yellow { background: #fff8e1; color: #f5a623; }
+.badge-green  { background: #e8f5e9; color: #3ab87a; border: 1px solid #c8e6c9; }
+.badge-red    { background: #fdecea; color: #e74c3c; }
+
+/* ── Card Detail ── */
+.card-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.detail-label { color: #555; font-weight: 600; }
+.detail-value { font-weight: 700; color: #1a1a1a; }
+.detail-value.green { color: #3ab87a; }
+
+/* ── Label Verifikasi (dalam card, di atas tombol) ── */
+.verify-label {
+  width: 100%;
+  padding: 12px;
+  background: #3ab87a;
+  color: white;
+  text-align: center;
+  font-size: 14.5px;
+  font-weight: 700;
+  border-radius: 10px;
+  margin-top: 2px;
+}
+
+/* ── Tombol Setuju / Tolak (di luar card) ── */
+.action-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 0 0;
+}
+
+.btn-approve {
+  width: 100%;
+  padding: 15px;
+  background: #3ab87a;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(58,184,122,0.3);
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-approve:hover  { background: #2ea569; }
+.btn-approve:active { transform: scale(0.98); }
+
+.btn-reject {
+  width: 100%;
+  padding: 15px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(231,76,60,0.3);
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-reject:hover  { background: #c0392b; }
+.btn-reject:active { transform: scale(0.98); }
+
+/* ── Empty State ── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 60px 20px;
+  color: #bbb;
+}
+
+.empty-state i { font-size: 48px; }
+.empty-state p { font-size: 15px; font-weight: 600; }
