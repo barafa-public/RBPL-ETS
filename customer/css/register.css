@@ -1,0 +1,166 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(160deg, #3ab87a 0%, #76d8a0 40%, #b2f0cb 100%);
+}
+
+/* Card memenuhi seluruh layar */
+.card {
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 50px 24px 36px;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo */
+.logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  background: #3ab87a;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28px;
+  box-shadow: 0 4px 16px rgba(58, 184, 122, 0.4);
+}
+
+/* Judul */
+.title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 13.5px;
+  color: #888;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* Form group */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrap input {
+  width: 100%;
+  padding: 13px 42px 13px 42px;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-family: 'Nunito', sans-serif;
+  color: #333;
+  background: #fafafa;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.input-wrap input::placeholder {
+  color: #bbb;
+}
+
+.input-wrap input:focus {
+  border-color: #3ab87a;
+  background: #fff;
+}
+
+.icon-left {
+  position: absolute;
+  left: 13px;
+  color: #bbb;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.icon-right {
+  position: absolute;
+  right: 13px;
+  color: #bbb;
+  font-size: 15px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.icon-right:hover {
+  color: #3ab87a;
+}
+
+/* Tombol daftar */
+.btn-daftar {
+  width: 100%;
+  padding: 15px;
+  background: #3ab87a;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 4px 16px rgba(58, 184, 122, 0.35);
+}
+
+.btn-daftar:hover {
+  background: #2ea569;
+}
+
+.btn-daftar:active {
+  transform: scale(0.98);
+}
+
+/* Login text */
+.login-text {
+  text-align: center;
+  font-size: 14px;
+  color: #888;
+  margin-top: 18px;
+}
+
+.login-text a {
+  color: #3ab87a;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.login-text a:hover {
+  text-decoration: underline;
+}
