@@ -1,161 +1,213 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
-  font-family: 'Nunito', sans-serif;
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  background: #3ab87a;
+    font-family: 'Nunito', sans-serif;
+    background-color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
 }
 
 .bg-overlay {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(160deg, #2ea569 0%, #3ab87a 40%, #76d8a0 100%);
-  opacity: 0.9;
-  z-index: 0;
+    display: none;
 }
 
 .wrapper {
-  position: relative;
-  z-index: 1;
-  width: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* ── DESKTOP: full-width, no card ── */
 .card {
-  background: #ffffff;
-  border-radius: 28px 28px 0 0;
-  padding: 36px 28px 48px;
-  box-shadow: 0 -8px 30px rgba(0,0,0,0.12);
-  animation: slideUp 0.4s ease;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to   { opacity: 1; transform: translateY(0); }
+    width: 100%;
+    max-width: 780px;
+    padding: 2rem 1.5rem;
+    background: transparent;
+    border-radius: 0;
 }
 
 .logo-wrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 18px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
 }
 
 .logo {
-  width: 62px;
-  height: 62px;
-  background: #3ab87a;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 26px;
-  box-shadow: 0 4px 16px rgba(58,184,122,0.4);
+    background: #4caf50;
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: #fff;
 }
 
 .title {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 800;
-  color: #1a1a1a;
-  margin-bottom: 4px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 800;
+    color: #1b1b1b;
+    margin-bottom: 6px;
 }
 
 .subtitle {
-  text-align: center;
-  font-size: 13.5px;
-  color: #888;
-  margin-bottom: 24px;
-}
-
-.form-group { margin-bottom: 16px; }
-
-.form-group label {
-  display: block;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 6px;
-}
-
-.input-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-wrap input {
-  width: 100%;
-  padding: 13px 42px;
-  border: 1.5px solid #e8e8e8;
-  border-radius: 12px;
-  font-size: 14px;
-  font-family: 'Nunito', sans-serif;
-  color: #333;
-  background: #fafafa;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.input-wrap input:focus { border-color: #3ab87a; background: #fff; }
-.input-wrap input::placeholder { color: #bbb; }
-
-.icon-left {
-  position: absolute;
-  left: 13px;
-  color: #bbb;
-  font-size: 15px;
-  pointer-events: none;
-}
-
-.icon-right {
-  position: absolute;
-  right: 13px;
-  color: #bbb;
-  font-size: 15px;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.icon-right:hover { color: #3ab87a; }
-
-.btn-masuk {
-  width: 100%;
-  padding: 15px;
-  background: #3ab87a;
-  color: white;
-  border: none;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: 700;
-  font-family: 'Nunito', sans-serif;
-  cursor: pointer;
-  margin-top: 8px;
-  box-shadow: 0 4px 16px rgba(58,184,122,0.35);
-  transition: background 0.2s, transform 0.1s;
-}
-
-.btn-masuk:hover  { background: #2ea569; }
-.btn-masuk:active { transform: scale(0.98); }
-
-.footer-note {
-  text-align: center;
-  font-size: 13px;
-  color: #aaa;
-  font-weight: 600;
-  margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 2rem;
 }
 
 .alert-error {
-  background: #fdecea;
-  color: #c0392b;
-  padding: 12px 14px;
-  border-radius: 10px;
-  font-size: 13.5px;
-  font-weight: 600;
-  margin-bottom: 16px;
+    background: #fdecea;
+    color: #c0392b;
+    border: 1px solid #f5c6cb;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.input-wrap {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 0 14px;
+    height: 52px;
+    gap: 10px;
+    background: #f7f7f7;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.input-wrap:focus-within {
+    border-color: #4caf50;
+    background: #fff;
+}
+
+.input-wrap .icon-left {
+    color: #bbb;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.input-wrap .icon-right {
+    color: #bbb;
+    font-size: 15px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.input-wrap .icon-right:hover {
+    color: #4caf50;
+}
+
+.input-wrap input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #333;
+    flex: 1;
+    font-family: 'Nunito', sans-serif;
+    width: 100%;
+}
+
+.input-wrap input::placeholder {
+    color: #bbb;
+}
+
+.btn-masuk {
+    width: 100%;
+    height: 52px;
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    letter-spacing: 0.3px;
+    margin-top: 0.5rem;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-masuk:hover {
+    background: #43a047;
+}
+
+.btn-masuk:active {
+    transform: scale(0.98);
+}
+
+.footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 1.2rem;
+}
+
+/* ── MOBILE: card style dengan background hijau ── */
+@media (max-width: 480px) {
+    body {
+        background-color: #6cec72ce;
+        align-items: center;
+        padding: 2rem 1.2rem;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 24px;
+        padding: 2rem 1.5rem 1.5rem;
+        max-width: 100%;
+        box-shadow: none;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .subtitle {
+        font-size: 13px;
+        margin-bottom: 1.5rem;
+    }
+
+    .input-wrap {
+        height: 48px;
+        border-radius: 12px;
+    }
+
+    .btn-masuk {
+        height: 50px;
+        border-radius: 12px;
+    }
+
+    .footer-note {
+        margin-top: 1rem;
+    }
 }
