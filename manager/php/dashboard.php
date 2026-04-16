@@ -106,7 +106,7 @@ $total_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tot
                 <div class="menu-icon yellow">
                     <i class="fa-solid fa-clipboard-list"></i>
                 </div>
-                <span class="menu-label">Monitoring Pesanan</span>
+                <span class="menu-label">Monitoring Laporan</span>
                 <i class="fa-solid fa-chevron-right menu-arrow"></i>
             </div>
 
