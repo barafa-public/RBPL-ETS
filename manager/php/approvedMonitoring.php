@@ -32,7 +32,7 @@ while ($row = mysqli_fetch_assoc($result))
 <body>
 
     <div class="header">
-        <button class="btn-back" onclick="window.location.href='dashboard.php'">
+        <button class="btn-back" onclick="window.location.href='allMonitoring.php'">
             <i class="fa-solid fa-arrow-left"></i>
         </button>
         <h2 class="header-title">Monitoring Pesanan</h2>
@@ -41,7 +41,7 @@ while ($row = mysqli_fetch_assoc($result))
     </div>
 
     <div class="tab-wrap">
-        <a href="allMonitoring.php" class="tab">Semua</a>
+        <a href="orderMonitoring.php" class="tab">Semua</a>
         <a href="awaitedMonitoring.php" class="tab">Menunggu</a>
         <a href="approvedMonitoring.php" class="tab active">Disetujui</a>
         <a href="rejectedMonitoring.php" class="tab">Ditolak</a>

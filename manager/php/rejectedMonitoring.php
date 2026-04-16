@@ -32,7 +32,7 @@ while ($row = mysqli_fetch_assoc($result))
 <body>
 
     <div class="header">
-        <button class="btn-back" onclick="window.location.href='dashboard.php'">
+        <button class="btn-back" onclick="window.location.href='allMonitoring.php'">
             <i class="fa-solid fa-arrow-left"></i>
         </button>
         <h2 class="header-title">Monitoring Pesanan</h2>
@@ -41,7 +41,7 @@ while ($row = mysqli_fetch_assoc($result))
     </div>
 
     <div class="tab-wrap">
-        <a href="allMonitoring.php" class="tab">Semua</a>
+        <a href="orderMonitoring.php" class="tab">Semua</a>
         <a href="awaitedMonitoring.php" class="tab">Menunggu</a>
         <a href="approvedMonitoring.php" class="tab">Disetujui</a>
         <a href="rejectedMonitoring.php" class="tab active">Ditolak</a>
@@ -61,31 +61,23 @@ while ($row = mysqli_fetch_assoc($result))
                     <div class="order-card">
                         <div class="card-top">
                             <div>
-                                <p class="order-id">
-                                    <?= $order_id ?>
-                                </p>
-                                <p class="customer-name">
-                                    <?= htmlspecialchars($order['customer_name']) ?>
-                                </p>
+                                <p class="order-id"><?= $order_id ?></p>
+                                <p class="customer-name"><?= htmlspecialchars($order['customer_name']) ?></p>
                             </div>
                             <span class="badge badge-red">Ditolak</span>
                         </div>
                         <div class="card-detail">
-                            <div class=" detail-row">
+                            <div class="detail-row">
                                 <span class="detail-label">Produk:</span>
                                 <span class="detail-value"><?= htmlspecialchars($order['product_name']) ?></span>
                             </div>
-                            <div class=" detail-row">
+                            <div class="detail-row">
                                 <span class="detail-label">Jumlah:</span>
-                                <span class="detail-value">
-                                    <?= $order['quantity'] ?> unit
-                                </span>
+                                <span class="detail-value"><?= $order['quantity'] ?> unit</span>
                             </div>
                             <div class="detail-row">
                                 <span class="detail-label">Total:</span>
-                                <span class="detail-value green">Rp
-                                    <?= number_format($order['total'], 0, ',', '.') ?>
-                                </span>
+                                <span class="detail-value green">Rp <?= number_format($order['total'], 0, ',', '.') ?></span>
                             </div>
                         </div>
                     </div>
