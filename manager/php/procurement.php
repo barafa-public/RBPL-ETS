@@ -9,19 +9,21 @@ include '../../config/connection.php';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $kode_barang = trim($_POST['kode_barang']);
-    $nama_barang = trim($_POST['nama_barang']);
-    $jumlah = (int) $_POST['jumlah'];
-    $tanggal = $_POST['tanggal'];
-    $supplier = trim($_POST['supplier']);
-    $status = 'Tersedia';
+    $kode_barang  = trim($_POST['kode_barang']);
+    $nama_barang  = trim($_POST['nama_barang']);
+    $jumlah       = (int) $_POST['jumlah'];
+    $tanggal      = $_POST['tanggal'];
+    $supplier     = trim($_POST['supplier']);
+    $harga_satuan = (int) str_replace(['.', ','], '', $_POST['harga_satuan'] ?? 0);
+    $harga_total  = $harga_satuan * $jumlah;
+    $status       = 'Tersedia';
 
-    if (empty($kode_barang) || empty($nama_barang) || $jumlah <= 0 || empty($tanggal) || empty($supplier)) {
+    if (empty($kode_barang) || empty($nama_barang) || $jumlah <= 0 || empty($tanggal) || empty($supplier) || $harga_satuan <= 0) {
         $error = 'Semua field harus diisi dengan benar!';
     } else {
-        // Simpan ke tabel procurement
-        $stmt = $conn->prepare("INSERT INTO procurement (kode_barang, nama_barang, jumlah, tanggal, supplier, status) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssisss", $kode_barang, $nama_barang, $jumlah, $tanggal, $supplier, $status);
+        // Simpan ke tabel procurement beserta harga_satuan dan harga_total
+        $stmt = $conn->prepare("INSERT INTO procurement (kode_barang, nama_barang, jumlah, tanggal, supplier, status, harga_satuan, harga_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssisssii", $kode_barang, $nama_barang, $jumlah, $tanggal, $supplier, $status, $harga_satuan, $harga_total);
 
         if ($stmt->execute()) {
             // Update stok di tabel products jika nama barang cocok
@@ -29,12 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Simpan data ke session untuk halaman sukses
             $_SESSION['procurement_success'] = [
-                'kode_barang' => $kode_barang,
-                'nama_barang' => $nama_barang,
-                'jumlah' => $jumlah,
-                'tanggal' => $tanggal,
-                'supplier' => $supplier,
-                'status' => $status,
+                'kode_barang'  => $kode_barang,
+                'nama_barang'  => $nama_barang,
+                'jumlah'       => $jumlah,
+                'tanggal'      => $tanggal,
+                'supplier'     => $supplier,
+                'status'       => $status,
+                'harga_satuan' => $harga_satuan,
+                'harga_total'  => $harga_total,
             ];
 
             header("Location: procureSuccess.php");
@@ -87,15 +91,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label>Nama Barang</label>
-                    <select name="nama_barang" required>
-                        <option value="" disabled <?= empty($_POST['nama_barang']) ? 'selected' : '' ?>>Masukkan nama
-                            barang</option>
+                    <select name="nama_barang" id="namaBarang" required>
+                        <option value="" disabled <?= empty($_POST['nama_barang']) ? 'selected' : '' ?>>Pilih nama barang</option>
                         <?php
-                        $products = mysqli_query($conn, "SELECT product_name FROM products");
+                        $products = mysqli_query($conn, "SELECT product_name, price FROM products");
+                        $product_prices = [];
                         while ($p = mysqli_fetch_assoc($products)):
                             $sel = (isset($_POST['nama_barang']) && $_POST['nama_barang'] === $p['product_name']) ? 'selected' : '';
-                            ?>
-                            <option value="<?= htmlspecialchars($p['product_name']) ?>" <?= $sel ?>>
+                            $product_prices[$p['product_name']] = $p['price'];
+                        ?>
+                            <option value="<?= htmlspecialchars($p['product_name']) ?>"
+                                data-price="<?= $p['price'] ?>"
+                                <?= $sel ?>>
                                 <?= htmlspecialchars($p['product_name']) ?>
                             </option>
                         <?php endwhile; ?>
@@ -104,8 +111,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label>Jumlah</label>
-                    <input type="number" name="jumlah" placeholder="Jumlah stok" min="1"
+                    <input type="number" name="jumlah" id="jumlah" placeholder="Jumlah stok" min="1"
                         value="<?= htmlspecialchars($_POST['jumlah'] ?? '') ?>" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Harga Satuan (Rp)</label>
+                    <div class="input-icon-wrap">
+                        <span class="prefix-rp">Rp</span>
+                        <input type="text" name="harga_satuan" id="hargaSatuan"
+                            placeholder="0"
+                            value="<?= isset($_POST['harga_satuan']) ? htmlspecialchars($_POST['harga_satuan']) : '' ?>"
+                            required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Total Harga</label>
+                    <div class="total-display" id="totalDisplay">Rp 0</div>
+                    <input type="hidden" name="harga_total_preview" id="hargaTotalHidden" value="0" />
                 </div>
 
                 <div class="form-group">
@@ -133,6 +157,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
+
+    <script>
+        function formatRupiah(num) {
+            return 'Rp ' + Math.round(num).toLocaleString('id-ID');
+        }
+
+        function hitungTotal() {
+            const hargaRaw = document.getElementById('hargaSatuan').value.replace(/\./g, '').replace(',', '');
+            const jumlah = parseInt(document.getElementById('jumlah').value) || 0;
+            const harga = parseInt(hargaRaw) || 0;
+            const total = harga * jumlah;
+            document.getElementById('totalDisplay').textContent = formatRupiah(total);
+            document.getElementById('hargaTotalHidden').value = total;
+        }
+
+        // Format input harga satuan dengan titik ribuan
+        document.getElementById('hargaSatuan').addEventListener('input', function () {
+            let val = this.value.replace(/\D/g, '');
+            this.value = val ? parseInt(val).toLocaleString('id-ID') : '';
+            hitungTotal();
+        });
+
+        document.getElementById('jumlah').addEventListener('input', hitungTotal);
+
+        // Jalankan sekali saat load (jika ada nilai POST sebelumnya)
+        hitungTotal();
+    </script>
 
 </body>
 
