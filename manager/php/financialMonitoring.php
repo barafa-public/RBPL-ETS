@@ -8,12 +8,6 @@ include '../../config/connection.php';
 
 $periode = $_GET['periode'] ?? 'harian';
 
-// ── Subquery UNION semua sumber pemasukan ──
-// Disesuaikan dengan struktur kolom masing-masing tabel:
-// cod_deposits          : order_id, nominal, created_at
-// bank_transfer_deposits: order_id, nominal, created_at  (tidak ada kolom order_id → join tidak bisa, pakai id sebagai pengganti)
-// ewallet_deposits      : order_id, nominal, created_at, platform
-// qris_deposits         : order_id, nominal, created_at
 $union_income = "
     SELECT nominal, created_at, order_id, 'COD'           AS metode, NULL AS info FROM cod_deposits
     UNION ALL
