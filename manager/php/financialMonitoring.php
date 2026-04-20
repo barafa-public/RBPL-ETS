@@ -8,14 +8,31 @@ include '../../config/connection.php';
 
 $periode = $_GET['periode'] ?? 'harian';
 
+// ── Subquery UNION semua sumber pemasukan ──
+// Gunakan o.created_at dari tabel orders sebagai tanggal acuan,
+// bukan created_at dari tabel deposit yang bisa ter-update otomatis (ON UPDATE CURRENT_TIMESTAMP)
 $union_income = "
-    SELECT nominal, created_at, order_id, 'COD'           AS metode, NULL AS info FROM cod_deposits
+    SELECT d.nominal, o.created_at, d.order_id, 'COD' AS metode, NULL AS info
+    FROM cod_deposits d
+    JOIN orders o ON d.order_id = o.id
+
     UNION ALL
-    SELECT nominal, created_at, order_id, 'Transfer Bank' AS metode, nama_bank AS info FROM bank_transfer_deposits
+
+    SELECT d.nominal, o.created_at, d.order_id, 'Transfer Bank' AS metode, d.nama_bank AS info
+    FROM bank_transfer_deposits d
+    JOIN orders o ON d.order_id = o.id
+
     UNION ALL
-    SELECT nominal, created_at, order_id, 'E-Wallet'      AS metode, platform AS info FROM ewallet_deposits
+
+    SELECT d.nominal, o.created_at, d.order_id, 'E-Wallet' AS metode, d.platform AS info
+    FROM ewallet_deposits d
+    JOIN orders o ON d.order_id = o.id
+
     UNION ALL
-    SELECT nominal, created_at, order_id, 'QRIS'          AS metode, NULL AS info FROM qris_deposits
+
+    SELECT d.nominal, o.created_at, d.order_id, 'QRIS' AS metode, NULL AS info
+    FROM qris_deposits d
+    JOIN orders o ON d.order_id = o.id
 ";
 
 // ── Format label berdasarkan periode ──
@@ -32,20 +49,20 @@ if ($periode === 'harian') {
 } elseif ($periode === 'mingguan') {
     $income_label_fmt = "CONCAT('Mg ', WEEK(created_at, 1))";
     $income_group_fmt = "YEAR(created_at), WEEK(created_at, 1)";
-    $income_order_fmt = "YEAR(created_at) DESC, WEEK(created_at, 1)";
+    $income_order_fmt = "YEAR(created_at) DESC, WEEK(created_at, 1) DESC";
     $expense_label_fmt = "CONCAT('Mg ', WEEK(tanggal, 1))";
     $expense_group_fmt = "YEAR(tanggal), WEEK(tanggal, 1)";
-    $expense_order_fmt = "YEAR(tanggal) DESC, WEEK(tanggal, 1)";
+    $expense_order_fmt = "YEAR(tanggal) DESC, WEEK(tanggal, 1) DESC";
     $chart_limit = 6;
     $chart_title_suffix = "6 Minggu Terakhir";
 
 } else {
     $income_label_fmt = "DATE_FORMAT(created_at, '%b %Y')";
     $income_group_fmt = "YEAR(created_at), MONTH(created_at)";
-    $income_order_fmt = "YEAR(created_at) DESC, MONTH(created_at)";
+    $income_order_fmt = "YEAR(created_at) DESC, MONTH(created_at) DESC";
     $expense_label_fmt = "DATE_FORMAT(tanggal, '%b %Y')";
     $expense_group_fmt = "YEAR(tanggal), MONTH(tanggal)";
-    $expense_order_fmt = "YEAR(tanggal) DESC, MONTH(tanggal)";
+    $expense_order_fmt = "YEAR(tanggal) DESC, MONTH(tanggal) DESC";
     $chart_limit = 6;
     $chart_title_suffix = "6 Bulan Terakhir";
 }
@@ -62,13 +79,13 @@ $total_expense = mysqli_fetch_assoc(mysqli_query($conn, "
 
 $saldo = $total_income - $total_expense;
 
-// ── Data chart pemasukan per periode (dari semua metode) ──
+// ── Data chart pemasukan per periode ──
 $income_map = [];
 $res = mysqli_query($conn, "
     SELECT {$income_label_fmt} as label, SUM(nominal) as total
     FROM ({$union_income}) AS all_income
     GROUP BY {$income_group_fmt}
-    ORDER BY {$income_order_fmt} DESC
+    ORDER BY {$income_order_fmt}
     LIMIT {$chart_limit}
 ");
 while ($row = mysqli_fetch_assoc($res))
@@ -81,7 +98,7 @@ $res2 = mysqli_query($conn, "
     SELECT {$expense_label_fmt} as label, SUM(harga_total) as total
     FROM procurement
     GROUP BY {$expense_group_fmt}
-    ORDER BY {$expense_order_fmt} DESC
+    ORDER BY {$expense_order_fmt}
     LIMIT {$chart_limit}
 ");
 while ($row = mysqli_fetch_assoc($res2))
@@ -94,63 +111,64 @@ $chart_labels = array_values($all_labels);
 $chart_income = array_map(fn($l) => $income_map[$l] ?? 0, $chart_labels);
 $chart_expense = array_map(fn($l) => $expense_map[$l] ?? 0, $chart_labels);
 
-// ── Transaksi terbaru (semua metode pemasukan + pengeluaran) ──
+// ── Transaksi terbaru — gunakan o.created_at dari orders sebagai tanggal ──
 $transactions = [];
 
 // Pemasukan: COD
 $res3 = mysqli_query($conn, "
     SELECT
         'Pemasukan' as tipe,
-        CONCAT('COD - Order #', LPAD(order_id, 3, '0')) as keterangan,
-        nominal,
-        DATE(created_at) as tanggal
-    FROM cod_deposits
-    ORDER BY created_at DESC
+        CONCAT('COD - Order #', LPAD(d.order_id, 3, '0')) as keterangan,
+        d.nominal,
+        DATE(o.created_at) as tanggal
+    FROM cod_deposits d
+    JOIN orders o ON d.order_id = o.id
+    ORDER BY o.created_at DESC
     LIMIT 10
 ");
 while ($row = mysqli_fetch_assoc($res3))
     $transactions[] = $row;
 
 // Pemasukan: Transfer Bank
-// Kolom: id, order_id, nama_bank, no_rekening, atas_nama, nominal, created_at
 $res4 = mysqli_query($conn, "
     SELECT
         'Pemasukan' as tipe,
-        CONCAT('Transfer Bank (', nama_bank, ') - Order #', LPAD(order_id, 3, '0')) as keterangan,
-        nominal,
-        DATE(created_at) as tanggal
-    FROM bank_transfer_deposits
-    ORDER BY created_at DESC
+        CONCAT('Transfer Bank (', d.nama_bank, ') - Order #', LPAD(d.order_id, 3, '0')) as keterangan,
+        d.nominal,
+        DATE(o.created_at) as tanggal
+    FROM bank_transfer_deposits d
+    JOIN orders o ON d.order_id = o.id
+    ORDER BY o.created_at DESC
     LIMIT 10
 ");
 while ($row = mysqli_fetch_assoc($res4))
     $transactions[] = $row;
 
 // Pemasukan: E-Wallet
-// Kolom: id, order_id, platform, no_pengirim, kode_transaksi, nominal, created_at
 $res5 = mysqli_query($conn, "
     SELECT
         'Pemasukan' as tipe,
-        CONCAT('E-Wallet (', platform, ') - Order #', LPAD(order_id, 3, '0')) as keterangan,
-        nominal,
-        DATE(created_at) as tanggal
-    FROM ewallet_deposits
-    ORDER BY created_at DESC
+        CONCAT('E-Wallet (', d.platform, ') - Order #', LPAD(d.order_id, 3, '0')) as keterangan,
+        d.nominal,
+        DATE(o.created_at) as tanggal
+    FROM ewallet_deposits d
+    JOIN orders o ON d.order_id = o.id
+    ORDER BY o.created_at DESC
     LIMIT 10
 ");
 while ($row = mysqli_fetch_assoc($res5))
     $transactions[] = $row;
 
 // Pemasukan: QRIS
-// Kolom: id, order_id, kode_transaksi, nominal, created_at
 $res6 = mysqli_query($conn, "
     SELECT
         'Pemasukan' as tipe,
-        CONCAT('QRIS - Order #', LPAD(order_id, 3, '0')) as keterangan,
-        nominal,
-        DATE(created_at) as tanggal
-    FROM qris_deposits
-    ORDER BY created_at DESC
+        CONCAT('QRIS - Order #', LPAD(d.order_id, 3, '0')) as keterangan,
+        d.nominal,
+        DATE(o.created_at) as tanggal
+    FROM qris_deposits d
+    JOIN orders o ON d.order_id = o.id
+    ORDER BY o.created_at DESC
     LIMIT 10
 ");
 while ($row = mysqli_fetch_assoc($res6))
