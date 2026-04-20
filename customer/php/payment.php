@@ -5,6 +5,8 @@ if (!isset($_SESSION['username'])) {
   exit;
 }
 
+$error = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   include '../../config/connection.php';
 
@@ -15,50 +17,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $payment_method = $_POST['payment_method'];
   $total = (int) $_POST['total'];
 
-  // Simpan pesanan ke tabel orders
-  $query = "INSERT INTO orders (customer_id, product_name, quantity, address, payment_method, total, status)
-              VALUES ('$customer_id', '$product_name', '$quantity', '$address', '$payment_method', '$total', 'Menunggu Konfirmasi')";
+  // ── Validasi stok di server-side (mencegah bypass dari JS) ──
+  $product_name_escaped = mysqli_real_escape_string($conn, $product_name);
+  $stok_row = mysqli_fetch_assoc(mysqli_query(
+    $conn,
+    "SELECT stock FROM products WHERE product_name = '$product_name_escaped' LIMIT 1"
+  ));
 
-  if (mysqli_query($conn, $query)) {
-    $order_id = mysqli_insert_id($conn);
-
-    // Simpan deposit sesuai metode pembayaran
-    if (stripos($payment_method, 'transfer') !== false) {
-      // Transfer Bank
-      $nama_bank = 'BCA';
-      $no_rek = '1234567890';
-      $atas_nama = 'PT Online Order System';
-      mysqli_query($conn, "
-                INSERT INTO bank_transfer_deposits (order_id, nama_bank, no_rekening, atas_nama, nominal)
-                VALUES ('$order_id', '$nama_bank', '$no_rek', '$atas_nama', '$total')
-            ");
-
-    } elseif (stripos($payment_method, 'qris') !== false) {
-      // QRIS
-      $kode_transaksi = 'QRIS-' . strtoupper(uniqid());
-      mysqli_query($conn, "
-                INSERT INTO qris_deposits (order_id, kode_transaksi, nominal)
-                VALUES ('$order_id', '$kode_transaksi', '$total')
-            ");
-
-    } elseif (stripos($payment_method, 'wallet') !== false || stripos($payment_method, 'ewallet') !== false) {
-      // E-Wallet
-      $platform = 'GoPay';
-      $no_pengirim = '-';
-      $kode_transaksi = 'EW-' . strtoupper(uniqid());
-      mysqli_query($conn, "
-                INSERT INTO ewallet_deposits (order_id, platform, no_pengirim, kode_transaksi, nominal)
-                VALUES ('$order_id', '$platform', '$no_pengirim', '$kode_transaksi', '$total')
-            ");
-
-    }
-    // COD → deposit dicatat oleh karyawan di codDeposit.php
-
-    header("Location: successPayment.php");
-    exit;
-
+  if (!$stok_row) {
+    $error = 'Produk tidak ditemukan.';
+  } elseif ($stok_row['stock'] <= 0) {
+    $error = 'Maaf, stok produk "' . htmlspecialchars($product_name) . '" sudah habis. Pesanan tidak dapat diproses.';
+  } elseif ($quantity > $stok_row['stock']) {
+    $error = 'Jumlah pesanan (' . $quantity . ') melebihi stok tersedia (' . $stok_row['stock'] . ' karton).';
   } else {
-    $error = "Gagal menyimpan pesanan: " . mysqli_error($conn);
+    // Simpan pesanan ke tabel orders
+    $query = "INSERT INTO orders (customer_id, product_name, quantity, address, payment_method, total, status)
+                VALUES ('$customer_id', '$product_name_escaped', '$quantity', '" . mysqli_real_escape_string($conn, $address) . "', '" . mysqli_real_escape_string($conn, $payment_method) . "', '$total', 'Menunggu Konfirmasi')";
+
+    if (mysqli_query($conn, $query)) {
+      $order_id = mysqli_insert_id($conn);
+
+      // Simpan deposit sesuai metode pembayaran
+      if (stripos($payment_method, 'transfer') !== false) {
+        // Transfer Bank
+        $nama_bank = 'BCA';
+        $no_rek = '1234567890';
+        $atas_nama = 'PT Online Order System';
+        mysqli_query($conn, "
+          INSERT INTO bank_transfer_deposits (order_id, nama_bank, no_rekening, atas_nama, nominal)
+          VALUES ('$order_id', '$nama_bank', '$no_rek', '$atas_nama', '$total')
+        ");
+
+      } elseif (stripos($payment_method, 'qris') !== false) {
+        // QRIS
+        $kode_transaksi = 'QRIS-' . strtoupper(uniqid());
+        mysqli_query($conn, "
+          INSERT INTO qris_deposits (order_id, kode_transaksi, nominal)
+          VALUES ('$order_id', '$kode_transaksi', '$total')
+        ");
+
+      } elseif (stripos($payment_method, 'wallet') !== false || stripos($payment_method, 'ewallet') !== false) {
+        // E-Wallet
+        $platform = 'GoPay';
+        $no_pengirim = '-';
+        $kode_transaksi = 'EW-' . strtoupper(uniqid());
+        mysqli_query($conn, "
+          INSERT INTO ewallet_deposits (order_id, platform, no_pengirim, kode_transaksi, nominal)
+          VALUES ('$order_id', '$platform', '$no_pengirim', '$kode_transaksi', '$total')
+        ");
+      }
+      // COD → deposit dicatat oleh karyawan di codDeposit.php
+
+      header("Location: successPayment.php");
+      exit;
+
+    } else {
+      $error = "Gagal menyimpan pesanan: " . mysqli_error($conn);
+    }
   }
 }
 ?>
@@ -88,7 +104,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="content">
 
     <?php if (!empty($error)): ?>
-      <div class="alert-error"><?= htmlspecialchars($error) ?></div>
+      <div class="alert-error">
+        <i class="fa-solid fa-circle-exclamation" style="margin-right:6px;"></i>
+        <?= htmlspecialchars($error) ?>
+        <br><a href="order.php" style="display:inline-block; margin-top:8px; color:#c0392b; font-weight:700;">
+          &larr; Kembali ke Pesanan
+        </a>
+      </div>
     <?php endif; ?>
 
     <div class="section-card">
