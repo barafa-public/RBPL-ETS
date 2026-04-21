@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
-  header("Location: login.php");
+  header("Location: index.php");
   exit;
 }
 include '../../config/connection.php';
@@ -81,7 +81,7 @@ $product_query = mysqli_query($conn, "SELECT * FROM products");
               <option value="<?= htmlspecialchars($p['product_name']) ?>" data-price="<?= $p['price'] ?>"
                 data-stock="<?= $p['stock'] ?>" <?= $p['stock'] <= 0 ? 'disabled' : '' ?>>
                 <?= htmlspecialchars($p['product_name']) ?> - Rp
-                <?= number_format($p['price'], 0, ',', '.') ?>  <?= $habis ?>
+                <?= number_format($p['price'], 0, ',', '.') ?>    <?= $habis ?>
               </option>
             <?php endwhile; ?>
           </select>

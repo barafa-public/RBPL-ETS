@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['manager'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
 }
 include '../../config/connection.php';
@@ -119,7 +119,7 @@ $chart_json = json_encode($chart_data);
                     <p class="stat-label"><?= htmlspecialchars($p['product_name']) ?></p>
                     <p class="stat-value"><?= number_format($p['stock'], 0, ',', '.') ?></p>
                 </div>
-          <?php endforeach; ?>
+            <?php endforeach; ?>
         </div>
 
     </div>

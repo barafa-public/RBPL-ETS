@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['employee'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
 }
 include '../../config/connection.php';
@@ -90,7 +90,7 @@ if (!$order) {
 
             <?php if (!empty($error)): ?>
                 <div class="alert-error"><?= htmlspecialchars($error) ?></div>
-          <?php endif; ?>
+              <?php endif; ?>
 
             <form method="POST" enctype="multipart/form-data">
 

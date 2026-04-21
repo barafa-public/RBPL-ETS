@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   VALUES ('$username', '$address', '$phone_number', '$password')";
 
     if (mysqli_query($conn, $query)) {
-      header("Location: login.php?status=success");
+      header("Location: index.php?status=success");
       exit;
     } else {
       $error = "Gagal mendaftar, coba lagi!";

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['manager'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
 }
 include '../../config/connection.php';
@@ -9,14 +9,14 @@ include '../../config/connection.php';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $kode_barang  = trim($_POST['kode_barang']);
-    $nama_barang  = trim($_POST['nama_barang']);
-    $jumlah       = (int) $_POST['jumlah'];
-    $tanggal      = $_POST['tanggal'];
-    $supplier     = trim($_POST['supplier']);
+    $kode_barang = trim($_POST['kode_barang']);
+    $nama_barang = trim($_POST['nama_barang']);
+    $jumlah = (int) $_POST['jumlah'];
+    $tanggal = $_POST['tanggal'];
+    $supplier = trim($_POST['supplier']);
     $harga_satuan = (int) str_replace(['.', ','], '', $_POST['harga_satuan'] ?? 0);
-    $harga_total  = $harga_satuan * $jumlah;
-    $status       = 'Tersedia';
+    $harga_total = $harga_satuan * $jumlah;
+    $status = 'Tersedia';
 
     if (empty($kode_barang) || empty($nama_barang) || $jumlah <= 0 || empty($tanggal) || empty($supplier) || $harga_satuan <= 0) {
         $error = 'Semua field harus diisi dengan benar!';
@@ -31,14 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Simpan data ke session untuk halaman sukses
             $_SESSION['procurement_success'] = [
-                'kode_barang'  => $kode_barang,
-                'nama_barang'  => $nama_barang,
-                'jumlah'       => $jumlah,
-                'tanggal'      => $tanggal,
-                'supplier'     => $supplier,
-                'status'       => $status,
+                'kode_barang' => $kode_barang,
+                'nama_barang' => $nama_barang,
+                'jumlah' => $jumlah,
+                'tanggal' => $tanggal,
+                'supplier' => $supplier,
+                'status' => $status,
                 'harga_satuan' => $harga_satuan,
-                'harga_total'  => $harga_total,
+                'harga_total' => $harga_total,
             ];
 
             header("Location: procureSuccess.php");
@@ -92,16 +92,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-group">
                     <label>Nama Barang</label>
                     <select name="nama_barang" id="namaBarang" required>
-                        <option value="" disabled <?= empty($_POST['nama_barang']) ? 'selected' : '' ?>>Pilih nama barang</option>
+                        <option value="" disabled <?= empty($_POST['nama_barang']) ? 'selected' : '' ?>>Pilih nama barang
+                        </option>
                         <?php
                         $products = mysqli_query($conn, "SELECT product_name, price FROM products");
                         $product_prices = [];
                         while ($p = mysqli_fetch_assoc($products)):
                             $sel = (isset($_POST['nama_barang']) && $_POST['nama_barang'] === $p['product_name']) ? 'selected' : '';
                             $product_prices[$p['product_name']] = $p['price'];
-                        ?>
-                            <option value="<?= htmlspecialchars($p['product_name']) ?>"
-                                data-price="<?= $p['price'] ?>"
+                            ?>
+                            <option value="<?= htmlspecialchars($p['product_name']) ?>" data-price="<?= $p['price'] ?>"
                                 <?= $sel ?>>
                                 <?= htmlspecialchars($p['product_name']) ?>
                             </option>
@@ -119,8 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label>Harga Satuan (Rp)</label>
                     <div class="input-icon-wrap">
                         <span class="prefix-rp">Rp</span>
-                        <input type="text" name="harga_satuan" id="hargaSatuan"
-                            placeholder="0"
+                        <input type="text" name="harga_satuan" id="hargaSatuan" placeholder="0"
                             value="<?= isset($_POST['harga_satuan']) ? htmlspecialchars($_POST['harga_satuan']) : '' ?>"
                             required />
                     </div>

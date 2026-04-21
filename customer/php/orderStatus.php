@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
 }
 include '../../config/connection.php';
@@ -46,90 +46,90 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <div class="content">
         <?php if (empty($orders)): ?>
-                <div class="empty-state">
-                    <i class="fa-solid fa-box-open"></i>
-                    <p>Belum ada pesanan</p>
-                </div>
+            <div class="empty-state">
+                <i class="fa-solid fa-box-open"></i>
+                <p>Belum ada pesanan</p>
+            </div>
         <?php else: ?>
 
-                <?php foreach ($orders as $order):
-                    $status = $order['status'];
+            <?php foreach ($orders as $order):
+                $status = $order['status'];
 
-                    // Tentukan ikon berdasarkan status
-                    if ($status === 'Dikirim') {
-                        $icon = 'fa-truck';
-                    } else {
-                        $icon = 'fa-box';
-                    }
+                // Tentukan ikon berdasarkan status
+                if ($status === 'Dikirim') {
+                    $icon = 'fa-truck';
+                } else {
+                    $icon = 'fa-box';
+                }
 
-                    // Badge label & warna
-                    $badge_map = [
-                        'Menunggu Konfirmasi' => ['label' => 'Menunggu Verif', 'class' => 'badge-yellow'],
-                        'Diproses' => ['label' => 'Sedang Diproses', 'class' => 'badge-green'],
-                        'Dikirim' => ['label' => 'Dalam Pengiriman', 'class' => 'badge-blue'],
-                        'Selesai' => ['label' => 'Selesai', 'class' => 'badge-gray'],
-                        'Dibatalkan' => ['label' => 'Dibatalkan', 'class' => 'badge-red'],
-                    ];
-                    $badge = $badge_map[$status] ?? ['label' => $status, 'class' => 'badge-gray'];
+                // Badge label & warna
+                $badge_map = [
+                    'Menunggu Konfirmasi' => ['label' => 'Menunggu Verif', 'class' => 'badge-yellow'],
+                    'Diproses' => ['label' => 'Sedang Diproses', 'class' => 'badge-green'],
+                    'Dikirim' => ['label' => 'Dalam Pengiriman', 'class' => 'badge-blue'],
+                    'Selesai' => ['label' => 'Selesai', 'class' => 'badge-gray'],
+                    'Dibatalkan' => ['label' => 'Dibatalkan', 'class' => 'badge-red'],
+                ];
+                $badge = $badge_map[$status] ?? ['label' => $status, 'class' => 'badge-gray'];
 
-                    // Timeline steps dan status aktif
+                // Timeline steps dan status aktif
+                $steps = ['Pesanan Telah Dibuat', 'Diproses', 'Dalam Pengiriman', 'Selesai'];
+                if ($status === 'Menunggu Konfirmasi') {
+                    $steps = ['Menunggu Verifikasi', 'Diproses', 'Dalam Pengiriman', 'Selesai'];
+                    $active_count = 1;
+                } elseif ($status === 'Diproses') {
                     $steps = ['Pesanan Telah Dibuat', 'Diproses', 'Dalam Pengiriman', 'Selesai'];
-                    if ($status === 'Menunggu Konfirmasi') {
-                        $steps = ['Menunggu Verifikasi', 'Diproses', 'Dalam Pengiriman', 'Selesai'];
-                        $active_count = 1;
-                    } elseif ($status === 'Diproses') {
-                        $steps = ['Pesanan Telah Dibuat', 'Diproses', 'Dalam Pengiriman', 'Selesai'];
-                        $active_count = 2;
-                    } elseif ($status === 'Dikirim') {
-                        $steps = ['Pesanan Diterima', 'Diproses', 'Dalam Pengiriman', 'Selesai'];
-                        $active_count = 3;
-                    } elseif ($status === 'Selesai') {
-                        $steps = ['Pesanan Diterima', 'Diproses', 'Dalam Pengiriman', 'Selesai'];
-                        $active_count = 4;
-                    } else {
-                        $active_count = 0;
-                    }
+                    $active_count = 2;
+                } elseif ($status === 'Dikirim') {
+                    $steps = ['Pesanan Diterima', 'Diproses', 'Dalam Pengiriman', 'Selesai'];
+                    $active_count = 3;
+                } elseif ($status === 'Selesai') {
+                    $steps = ['Pesanan Diterima', 'Diproses', 'Dalam Pengiriman', 'Selesai'];
+                    $active_count = 4;
+                } else {
+                    $active_count = 0;
+                }
 
-                    $order_date = date('d M Y', strtotime($order['created_at']));
-                    $order_id = 'ORD' . str_pad($order['id'], 3, '0', STR_PAD_LEFT);
-                    ?>
+                $order_date = date('d M Y', strtotime($order['created_at']));
+                $order_id = 'ORD' . str_pad($order['id'], 3, '0', STR_PAD_LEFT);
+                ?>
 
-                        <div class="order-card">
-                            <div class="order-header">
-                                <div class="order-left">
-                                    <i class="fa-solid <?= $icon ?> order-icon"></i>
-                                    <div>
-                                        <p class="order-id">ID: <?= $order_id ?></p>
-                                        <p class="order-product"><?= htmlspecialchars($order['product_name']) ?></p>
-                                    </div>
-                                </div>
-                                <span class="badge <?= $badge['class'] ?>"><?= $badge['label'] ?></span>
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-left">
+                            <i class="fa-solid <?= $icon ?> order-icon"></i>
+                            <div>
+                                <p class="order-id">ID: <?= $order_id ?></p>
+                                <p class="order-product"><?= htmlspecialchars($order['product_name']) ?></p>
                             </div>
-
-                            <!-- Timeline -->
-                            <div class="timeline">
-                                <?php foreach ($steps as $i => $step):
-                                    $is_active = ($i + 1) <= $active_count;
-                                    $is_last = $i === count($steps) - 1;
-                                    ?>
-                                        <div class="timeline-item">
-                                            <div class="timeline-left">
-                                                <div class="dot <?= $is_active ? 'dot-active' : 'dot-inactive' ?>"></div>
-                                                <?php if (!$is_last): ?>
-                                                        <div
-                                                            class="line <?= $is_active && ($i + 2) <= $active_count ? 'line-active' : 'line-inactive' ?>">
-                                                        </div>
-                                                <?php endif; ?>
-                                            </div>
-                                            <p class="step-label <?= $is_active ? 'step-active' : 'step-inactive' ?>"><?= $step ?></p>
-                                        </div>
-                                <?php endforeach; ?>
-                            </div>
-
-                            <p class="order-date"><?= $order_date ?></p>
                         </div>
+                        <span class="badge <?= $badge['class'] ?>"><?= $badge['label'] ?></span>
+                    </div>
 
-                <?php endforeach; ?>
+                    <!-- Timeline -->
+                    <div class="timeline">
+                        <?php foreach ($steps as $i => $step):
+                            $is_active = ($i + 1) <= $active_count;
+                            $is_last = $i === count($steps) - 1;
+                            ?>
+                            <div class="timeline-item">
+                                <div class="timeline-left">
+                                    <div class="dot <?= $is_active ? 'dot-active' : 'dot-inactive' ?>"></div>
+                                    <?php if (!$is_last): ?>
+                                        <div
+                                            class="line <?= $is_active && ($i + 2) <= $active_count ? 'line-active' : 'line-inactive' ?>">
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <p class="step-label <?= $is_active ? 'step-active' : 'step-inactive' ?>"><?= $step ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <p class="order-date"><?= $order_date ?></p>
+                </div>
+
+            <?php endforeach; ?>
         <?php endif; ?>
 
     </div>

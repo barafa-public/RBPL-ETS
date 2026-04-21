@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['manager'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
 }
 include '../../config/connection.php';
@@ -96,92 +96,91 @@ while ($s = mysqli_fetch_assoc($stok_res))
     <div class="content">
 
         <?php if (!empty($action_error)): ?>
-                <div class="alert-error" style="margin-bottom:16px; padding:12px 14px; background:#fdecea; color:#c0392b; border-radius:12px; font-size:13.5px; font-weight:600;">
-                    <i class="fa-solid fa-circle-exclamation" style="margin-right:6px;"></i>
-                    <?= $action_error ?>
-                </div>
+            <div class="alert-error"
+                style="margin-bottom:16px; padding:12px 14px; background:#fdecea; color:#c0392b; border-radius:12px; font-size:13.5px; font-weight:600;">
+                <i class="fa-solid fa-circle-exclamation" style="margin-right:6px;"></i>
+                <?= $action_error ?>
+            </div>
         <?php endif; ?>
 
         <?php if (empty($orders)): ?>
-                <div class="empty-state">
-                    <i class="fa-solid fa-box-open"></i>
-                    <p>Belum ada pesanan</p>
-                </div>
+            <div class="empty-state">
+                <i class="fa-solid fa-box-open"></i>
+                <p>Belum ada pesanan</p>
+            </div>
         <?php else: ?>
-                <?php foreach ($orders as $order):
-                    $order_id = 'ORD' . str_pad($order['id'], 3, '0', STR_PAD_LEFT);
-                    $status = $order['status'];
-                    $stok_produk = $stok_map[$order['product_name']] ?? 0;
-                    $stok_cukup = $stok_produk >= (int) $order['quantity'];
+            <?php foreach ($orders as $order):
+                $order_id = 'ORD' . str_pad($order['id'], 3, '0', STR_PAD_LEFT);
+                $status = $order['status'];
+                $stok_produk = $stok_map[$order['product_name']] ?? 0;
+                $stok_cukup = $stok_produk >= (int) $order['quantity'];
 
-                    if ($status === 'Menunggu Konfirmasi') {
-                        $badge_label = 'Menunggu';
-                        $badge_class = 'badge-yellow';
-                    } elseif (in_array($status, ['Diproses', 'Dikirim', 'Selesai'])) {
-                        $badge_label = 'Disetujui';
-                        $badge_class = 'badge-green';
-                    } else {
-                        $badge_label = 'Ditolak';
-                        $badge_class = 'badge-red';
-                    }
-                    $show_action = ($status === 'Menunggu Konfirmasi');
-                    ?>
-                        <div class="order-block">
+                if ($status === 'Menunggu Konfirmasi') {
+                    $badge_label = 'Menunggu';
+                    $badge_class = 'badge-yellow';
+                } elseif (in_array($status, ['Diproses', 'Dikirim', 'Selesai'])) {
+                    $badge_label = 'Disetujui';
+                    $badge_class = 'badge-green';
+                } else {
+                    $badge_label = 'Ditolak';
+                    $badge_class = 'badge-red';
+                }
+                $show_action = ($status === 'Menunggu Konfirmasi');
+                ?>
+                <div class="order-block">
 
-                            <div class="order-card">
-                                <div class="card-top">
-                                    <div>
-                                        <p class="order-id"><?= $order_id ?></p>
-                                        <p class="customer-name"><?= htmlspecialchars($order['customer_name']) ?></p>
-                                    </div>
-                                    <span class="badge <?= $badge_class ?>"><?= $badge_label ?></span>
-                                </div>
-                                <div class="card-detail">
-                                    <div class="detail-row">
-                                        <span class="detail-label">Produk:</span>
-                                        <span class="detail-value"><?= htmlspecialchars($order['product_name']) ?></span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="detail-label">Jumlah:</span>
-                                        <span class="detail-value"><?= $order['quantity'] ?> unit</span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="detail-label">Total:</span>
-                                        <span class="detail-value green">Rp <?= number_format($order['total'], 0, ',', '.') ?></span>
-                                    </div>
-                                    <?php if ($show_action): ?>
-                                            <div class="detail-row">
-                                                <span class="detail-label">Stok saat ini:</span>
-                                                <span class="detail-value"
-                                                      style="font-weight:700; color:<?= $stok_cukup ? '#2e7d32' : '#c0392b' ?>;">
-                                                    <?= $stok_produk ?> unit
-                                                    <?= !$stok_cukup ? ' &#9888; Tidak cukup' : '' ?>
-                                                </span>
-                                            </div>
-                                    <?php endif; ?>
-                                </div>
-                                <?php if ($show_action): ?>
-                                        <div class="verify-label">Verifikasi Pesanan</div>
-                                <?php endif; ?>
+                    <div class="order-card">
+                        <div class="card-top">
+                            <div>
+                                <p class="order-id"><?= $order_id ?></p>
+                                <p class="customer-name"><?= htmlspecialchars($order['customer_name']) ?></p>
                             </div>
-
-                            <?php if ($show_action): ?>
-                                    <form method="POST" class="action-wrap">
-                                        <input type="hidden" name="order_id" value="<?= $order['id'] ?>" />
-                                        <?php if ($stok_cukup): ?>
-                                                <button type="submit" name="action" value="approve" class="btn-approve">Setuju</button>
-                                        <?php else: ?>
-                                                <button type="button" class="btn-approve"
-                                                    style="opacity:0.4; cursor:not-allowed;"
-                                                    title="Stok tidak mencukupi untuk menyetujui pesanan ini"
-                                                    disabled>Setuju</button>
-                                        <?php endif; ?>
-                                        <button type="submit" name="action" value="reject" class="btn-reject">Tolak</button>
-                                    </form>
-                            <?php endif; ?>
-
+                            <span class="badge <?= $badge_class ?>"><?= $badge_label ?></span>
                         </div>
-                <?php endforeach; ?>
+                        <div class="card-detail">
+                            <div class="detail-row">
+                                <span class="detail-label">Produk:</span>
+                                <span class="detail-value"><?= htmlspecialchars($order['product_name']) ?></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Jumlah:</span>
+                                <span class="detail-value"><?= $order['quantity'] ?> unit</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Total:</span>
+                                <span class="detail-value green">Rp <?= number_format($order['total'], 0, ',', '.') ?></span>
+                            </div>
+                            <?php if ($show_action): ?>
+                                <div class="detail-row">
+                                    <span class="detail-label">Stok saat ini:</span>
+                                    <span class="detail-value"
+                                        style="font-weight:700; color:<?= $stok_cukup ? '#2e7d32' : '#c0392b' ?>;">
+                                        <?= $stok_produk ?> unit
+                                        <?= !$stok_cukup ? ' &#9888; Tidak cukup' : '' ?>
+                                    </span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php if ($show_action): ?>
+                            <div class="verify-label">Verifikasi Pesanan</div>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if ($show_action): ?>
+                        <form method="POST" class="action-wrap">
+                            <input type="hidden" name="order_id" value="<?= $order['id'] ?>" />
+                            <?php if ($stok_cukup): ?>
+                                <button type="submit" name="action" value="approve" class="btn-approve">Setuju</button>
+                            <?php else: ?>
+                                <button type="button" class="btn-approve" style="opacity:0.4; cursor:not-allowed;"
+                                    title="Stok tidak mencukupi untuk menyetujui pesanan ini" disabled>Setuju</button>
+                            <?php endif; ?>
+                            <button type="submit" name="action" value="reject" class="btn-reject">Tolak</button>
+                        </form>
+                    <?php endif; ?>
+
+                </div>
+            <?php endforeach; ?>
         <?php endif; ?>
     </div>
 
